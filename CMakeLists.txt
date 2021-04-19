@@ -43,9 +43,8 @@ find_package(nlohmann_json CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
         # enum your files and delete this comment
-        sources/source.cpp
-        include/Element.hpp
-        include/header.hpp include/PicoSHA.hpp)
+        sources/Database.cpp
+        include/Database.hpp include/PicoSHA.hpp)
 
 target_link_libraries(${PROJECT_NAME}
         Boost::log
@@ -58,7 +57,7 @@ target_link_libraries(${PROJECT_NAME}
 
 add_executable(demo
         ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp
-        sources/source.cpp)
+        sources/Database.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
