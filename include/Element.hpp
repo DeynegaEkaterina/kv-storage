@@ -1,13 +1,11 @@
-//
-// Created by ekaterina on 21.04.2021.
-//
+// Copyright 2020 Your Name <your_email>
 
-#ifndef SUGGESTION_ELEMENT_HPP
-#define SUGGESTION_ELEMENT_HPP
+#ifndef SUGGESTION_ELEMENT_HPP_
+#define SUGGESTION_ELEMENT_HPP_
 
 #include <string>
 struct Element{
-  Element()=default;
+  Element() = default;
 
   Element(std::string key, std::string value, std::string family_name){
     _key = key;
@@ -19,4 +17,4 @@ struct Element{
   std::string _value;
   std::string _family_name;
 };
-#endif  // SUGGESTION_ELEMENT_HPP
+#endif  // SUGGESTION_ELEMENT_HPP_

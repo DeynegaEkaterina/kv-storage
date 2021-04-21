@@ -44,7 +44,7 @@ find_package(nlohmann_json CONFIG REQUIRED)
 add_library(${PROJECT_NAME} STATIC
         # enum your files and delete this comment
         sources/Database.cpp
-        include/Database.hpp include/PicoSHA.hpp include/Element.hpp)
+        include/Database.hpp include/Element.hpp)
 
 target_link_libraries(${PROJECT_NAME}
         Boost::log
