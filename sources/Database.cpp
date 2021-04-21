@@ -100,3 +100,22 @@ void Database::print() {
     delete it;
   }
 }
+
+void Database::fill_db() {}
+
+//fills the queue with values from given db
+void Database::read_db(){
+    for (const auto iter : _handles) {
+      rocksdb::Iterator *it =
+          _db->NewIterator(rocksdb::ReadOptions(),
+                           iter);
+      for (it->SeekToFirst(); it->Valid(); it->Next()) {
+        Element tmp(iter->GetName(),
+                    it->key().ToString(),
+                    it->value().ToString());
+        elements.push(tmp);
+      }
+      assert(it->status().ok());
+      delete it;
+    }
+  }

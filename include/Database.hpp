@@ -31,6 +31,7 @@ class Database{
   void print();
   void fill_vector(int num);
   void fill_db();
+  void read_db();
 
   std::vector<std::string> _column_families_names;
   rocksdb::DB *_db;
