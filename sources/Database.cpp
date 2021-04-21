@@ -144,7 +144,7 @@ void Database::read_db(){
                     it->value().ToString(),
                     iter->GetName());
         elements.push(tmp);
-        std::cout <<tmp._key << " " << tmp._value << std::endl;
+       // std::cout <<tmp._key << " " << tmp._value << std::endl;
       }
       assert(it->status().ok());
       if(!elements.empty())
