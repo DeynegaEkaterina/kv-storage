@@ -11,12 +11,14 @@
 #include <rocksdb/options.h>
 #include <rocksdb/table.h>
 #include <boost/lexical_cast.hpp>
-
+#include <PicoSHA2/picosha2.h>
 
 #include <iostream>
 #include <queue>
 #include <vector>
 #include <string>
+#include <mutex>
+
 using namespace rocksdb;
 
 class Database{
@@ -25,6 +27,7 @@ class Database{
 
   void create_db(std::string path, std::vector<std::string> family_names);
   void open_db();
+  void close_db();
   void parse(std::string way_to_db);
   void put_value(Element element);
   Element get_value(std::string key, std::string column_family_name);
@@ -38,7 +41,7 @@ class Database{
   std::vector<rocksdb::ColumnFamilyHandle *> _handles;
   std::string _way;
   std::vector<rocksdb::ColumnFamilyDescriptor> _column_families;
-  std::queue<Element> elements;
+  std::mutex m1, m2;
 };
 
 

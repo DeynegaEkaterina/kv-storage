@@ -61,6 +61,7 @@ add_executable(demo
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third-party>"
         "$<INSTALL_INTERFACE:include>"
         )
 

@@ -2,6 +2,7 @@
 
 #include <Database.hpp>
 
+std::queue<Element> elements;
 
 //creates db with given cf_names and path
 void Database::create_db(std::string path,
@@ -30,6 +31,9 @@ void Database::open_db() {
   DB::Open(DBOptions(), _way, _column_families, &_handles, &_db);
 }
 
+void Database::close_db() {
+  delete _db;
+}
 
 //fills _column_families_names
 void Database::fill_vector(int num) {
@@ -55,6 +59,7 @@ void Database::parse(std::string way_to_db){
 
 //writes value to db
 void Database::put_value(Element element) {
+  m2.lock();
   std::vector<std::string>::iterator it =
       std::find(_column_families_names.begin(),
              _column_families_names.end(), element._family_name);
@@ -62,9 +67,11 @@ void Database::put_value(Element element) {
     Status s;
     s = _db ->Put(WriteOptions(),
   _handles[std::distance(_column_families_names.begin(), it)],
-             element._key, element._value);
+             element._key,
+      picosha2::hash256_hex_string(element._key + element._value));
     assert(s.ok());
   }
+  m2.unlock();
 }
 
 //gets value from db
@@ -101,7 +108,30 @@ void Database::print() {
   }
 }
 
-void Database::fill_db() {}
+//fills new db with values from queue
+void Database::fill_db() {
+  /*if(!elements.empty())
+    std::cout << "(FILL_DB) queue is not empty!!!" << std::endl;
+  else
+    std::cout << "(FILL_DB) QUEUE IS EMPTY!!!" << std::endl;*/
+  bool status = true;
+  while (status) {
+    m1.lock();
+    if (!elements.empty())
+    {
+      Element tmp = elements.front();
+      put_value(tmp);
+      elements.pop();
+      //std::cout << "queue is not empty" << std::endl;
+      m1.unlock();
+    } else {
+      status = false;
+      //std::cout << "queue is empty" << std::endl;
+      m1.unlock();
+    }
+  }
+}
+
 
 //fills the queue with values from given db
 void Database::read_db(){
@@ -110,12 +140,17 @@ void Database::read_db(){
           _db->NewIterator(rocksdb::ReadOptions(),
                            iter);
       for (it->SeekToFirst(); it->Valid(); it->Next()) {
-        Element tmp(iter->GetName(),
-                    it->key().ToString(),
-                    it->value().ToString());
+        Element tmp(it->key().ToString(),
+                    it->value().ToString(),
+                    iter->GetName());
         elements.push(tmp);
+        std::cout <<tmp._key << " " << tmp._value << std::endl;
       }
       assert(it->status().ok());
+      if(!elements.empty())
+       /* std::cout << "queue is not empty!!!" << std::endl;
+      else
+        std::cout << "QUEUE IS EMPTY!!!" << std::endl;*/
       delete it;
     }
   }
