@@ -12,8 +12,6 @@
 #include <rocksdb/table.h>
 #include <boost/lexical_cast.hpp>
 #include <PicoSHA2/picosha2.h>
-#include <boost/log/trivial.hpp>
-#include <boost/log/trivial.hpp>
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
 #include <boost/log/sinks/text_file_backend.hpp>
@@ -32,7 +30,6 @@
 #include <string>
 #include <mutex>
 
-using namespace rocksdb;
 
 class Database{
  public:

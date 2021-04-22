@@ -1,7 +1,7 @@
 // Copyright 2020 Your Name <your_email>
 
-#ifndef SUGGESTION_ELEMENT_HPP_
-#define SUGGESTION_ELEMENT_HPP_
+#ifndef INCLUDE_ELEMENT_HPP_
+#define INCLUDE_ELEMENT_HPP_
 
 #include <string>
 struct Element{
@@ -17,4 +17,4 @@ struct Element{
   std::string _value;
   std::string _family_name;
 };
-#endif  // SUGGESTION_ELEMENT_HPP_
+#endif  // INCLUDE_ELEMENT_HPP_
