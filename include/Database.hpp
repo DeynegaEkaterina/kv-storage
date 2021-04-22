@@ -12,6 +12,19 @@
 #include <rocksdb/table.h>
 #include <boost/lexical_cast.hpp>
 #include <PicoSHA2/picosha2.h>
+#include <boost/log/trivial.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/core.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/sinks/text_file_backend.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/support/date_time.hpp>
+#include <boost/date_time/gregorian/greg_month.hpp>
+
 
 #include <iostream>
 #include <queue>

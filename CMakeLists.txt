@@ -29,31 +29,24 @@ string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
 string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 
-hunter_add_package(Beast)
-find_package(Beast CONFIG REQUIRED)
+hunter_add_package(gflags)
+find_package(gflags CONFIG REQUIRED)
+
 hunter_add_package(rocksdb)
 find_package(RocksDB CONFIG REQUIRED)
-hunter_add_package(Boost COMPONENTS program_options thread log filesystem)
-find_package(Boost CONFIG REQUIRED program_options thread log log_setup filesystem)
-find_package(Threads)
+
+hunter_add_package(Boost COMPONENTS log filesystem system chrono thread regex date_time atomic program_options)
+find_package(Boost CONFIG REQUIRED log log_setup filesystem system chrono thread regex date_time atomic program_options)
+
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
-hunter_add_package(nlohmann_json)
-find_package(nlohmann_json CONFIG REQUIRED)
+
 
 add_library(${PROJECT_NAME} STATIC
         # enum your files and delete this comment
         sources/Database.cpp
         include/Database.hpp include/Element.hpp)
 
-target_link_libraries(${PROJECT_NAME}
-        Boost::log
-        Boost::thread
-        Boost::program_options
-        Boost::log_setup
-        Boost::filesystem
-        RocksDB::rocksdb
-        )
 
 add_executable(demo
         ${CMAKE_CURRENT_SOURCE_DIR}/demo/main.cpp
@@ -65,12 +58,22 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         "$<INSTALL_INTERFACE:include>"
         )
 
-target_link_libraries(demo ${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}
+        Boost::log_setup
+        Boost::log
         Boost::filesystem
+        Boost::chrono
         Boost::thread
-        GTest::gmock_main
+        Boost::regex
+        Boost::date_time
+        Boost::atomic
+        Boost::system
+        Boost::boost
+        Boost::program_options
+        RocksDB::rocksdb
         )
 
+target_link_libraries(demo ${PROJECT_NAME})
 
 if(BUILD_TESTS)
   add_executable(tests
