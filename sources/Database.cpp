@@ -28,7 +28,8 @@ void Database::create_db(std::string path,
 
 //opens db
 void Database::open_db() {
-  rocksdb::DB::Open(rocksdb::DBOptions(), _way, _column_families, &_handles, &_db);
+  rocksdb::DB::Open(rocksdb::DBOptions(), _way, _column_families,
+                    &_handles, &_db);
 }
 
 void Database::close_db() {
