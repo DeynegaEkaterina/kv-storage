@@ -6,7 +6,7 @@
 namespace po = boost::program_options;
 std::string path_in("/home/ekaterina/CLionProjects/lab-10-kv-storage/cmake-build-debug/db1");
 std::string path_out("/home/ekaterina/CLionProjects/lab-10-kv-storage/cmake-build-debug/db2");
-const size_t ten_MiB = 1024 * 10 * 1024;
+const size_t _256_MiB = 1024 * 256 * 1024;
 
 int main(int argc, char* argv[]) {
 
@@ -63,6 +63,20 @@ int main(int argc, char* argv[]) {
     std::cout << "input:" << input << std::endl;
   }
 
+
+ /* boost::log::register_simple_formatter_factory<boost::log
+  ::trivial::severity_level, char>(log_level);
+  const std::string format =
+      "%TimeStamp% <%Severity%> (%ThreadID%): %Message%";
+  boost::log::add_file_log(
+      boost::log::keywords::file_name = "logs/log_trace_%N.log",
+      boost::log::keywords::rotation_size = _256_MiB,
+      boost::log::keywords::format = format);
+  boost::log::add_console_log(
+      std::cout,
+      boost::log::keywords::format =
+          format);
+  boost::log::add_common_attributes();*/
 
   Database db1;
   db1.parse(path_in);
