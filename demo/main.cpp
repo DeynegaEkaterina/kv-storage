@@ -64,28 +64,6 @@ int main(int argc, char* argv[]) {
   }
 
 
-  boost::log::register_simple_formatter_factory<boost::log
-  ::trivial::severity_level, char>(log_level);
-  boost::log::add_file_log(
-      boost::log::keywords::file_name = "/home/ekaterina/CLionProjects/lab-10-kv-storage/cmake-build-debug/log.log",
-      boost::log::keywords::rotation_size = 256 * 1024 * 1024,
-      boost::log::keywords::filter = boost::log::trivial::severity
-                                     >= boost::log::trivial::info,
-      boost::log::keywords::format =
-          (
-              boost::log::expressions::stream
-                  << boost::posix_time
-                  ::second_clock::local_time()
-                  << " : <" << boost::log::
-                  trivial::severity
-                  << "> " << boost::log::expressions::smessage));
-  boost::log::add_console_log(
-      std::cout,
-      boost::log::keywords::format =
-          "[%ThreadID%][%TimeStamp%][%Severity%]: %Message%");
-  boost::log::add_common_attributes();
-
-
   Database db1;
   db1.parse(path_in);
   db1.open_db();
