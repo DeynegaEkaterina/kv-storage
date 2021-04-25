@@ -120,8 +120,8 @@ void Database::fill_db() {
       Element tmp = elements.front();
       put_value(tmp);
       elements.pop();
-      //BOOST_LOG_SEV(logger(level), level) << " :" << tmp._key << " "
-                             //  << tmp._value << std::endl;
+      BOOST_LOG_TRIVIAL(info) << " :" << tmp._key << " "
+                             << tmp._value << std::endl;
       m1.unlock();
     } else {
       status = false;
@@ -146,8 +146,8 @@ void Database::read_db() {
 }
 
 void Database::logger(std::string &level) {
-  boost::log::core::get()->set_filter(boost::log::trivial::severity >=
-                                      choose_sev_level(level));
+  boost::log::register_simple_formatter_factory<boost::log
+  ::trivial::severity_level, char>(level);
   const std::string format =
       "%TimeStamp% <%Severity%> (%ThreadID%): %Message%";
   boost::log::add_file_log(
@@ -159,18 +159,4 @@ void Database::logger(std::string &level) {
       boost::log::keywords::format =
           format);
   boost::log::add_common_attributes();
-}
-
-boost::log::trivial::severity_level Database::choose_sev_level(
-    const std::string& log_level) {
-  if (log_level == "trace")
-    return boost::log::trivial::severity_level::trace;
-  else if (log_level == "debug")
-    return boost::log::trivial::severity_level::debug;
-  else if (log_level == "info")
-    return boost::log::trivial::severity_level::info;
-  else if (log_level == "warning")
-    return boost::log::trivial::severity_level::warning;
-  else
-    return boost::log::trivial::severity_level::error;
 }

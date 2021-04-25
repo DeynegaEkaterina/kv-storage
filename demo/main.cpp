@@ -2,6 +2,7 @@
 #include <iostream>
 #include <boost/program_options.hpp>
 #include <thread>
+#include <ThreadPool.h>
 
 namespace po = boost::program_options;
 std::string path_in("/home/ekaterina/CLionProjects/lab-10-kv-storage/cmake-build-debug/db1");
@@ -63,18 +64,22 @@ int main(int argc, char* argv[]) {
     input = path_in;
     std::cout << "input:" << input << std::endl;
   }
- log_level = "trace";
+
   Database::logger(log_level);
 
-     std::vector <std::thread> threads;
+   /* std::vector <std::thread> threads;
   for (size_t i = 0; i < thread_count; ++i) {
     std::thread th(Database::fill_db);
     threads.push_back(std::move(th));
   }
   for (auto &it : threads) {
     it.join();
-  }
+  }*/
 
+  ThreadPool pool_in(thread_count);
+  ThreadPool pool_out(thread_count);
+  pool_in.enqueue(Database::read_db);
+  pool_out.enqueue(Database::fill_db);
 
   Database db1;
   db1.parse(path_in);
