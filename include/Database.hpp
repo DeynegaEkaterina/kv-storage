@@ -29,29 +29,34 @@
 #include <vector>
 #include <string>
 #include <mutex>
+#include <thread>
 
 
 class Database{
  public:
   Database() = default;
 
-  void create_db(std::string path, std::vector<std::string> family_names);
+  void create_db(std::string &path, std::vector<std::string> &family_names);
   void open_db();
   void close_db();
-  void parse(std::string way_to_db);
-  void put_value(Element element);
-  Element get_value(std::string key, std::string column_family_name);
+  void parse(std::string &way_to_db);
+  static void put_value(Element &element);
+  Element get_value(std::string &key, std::string &column_family_name);
   void print();
-  void fill_vector(int num);
-  void fill_db();
+  void fill_vector(int &num);
+  static void fill_db();
   void read_db();
+  static void logger(std::string &level);
+  static void print_trivial_log(Element &element);
 
-  std::vector<std::string> _column_families_names;
-  rocksdb::DB *_db;
-  std::vector<rocksdb::ColumnFamilyHandle *> _handles;
+  inline static std::vector<std::string> _column_families_names;
+  inline static rocksdb::DB *_db;
+  inline static std::vector<rocksdb::ColumnFamilyHandle *> _handles;
   std::string _way;
-  std::vector<rocksdb::ColumnFamilyDescriptor> _column_families;
-  std::mutex m1, m2;
+  inline static std::vector<rocksdb::ColumnFamilyDescriptor> _column_families;
+  inline static std::mutex m1;
+  inline static std::mutex m2;
+  inline static  size_t _256_MiB = 1024 * 256 * 1024;
 };
 
 

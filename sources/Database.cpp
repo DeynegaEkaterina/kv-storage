@@ -5,8 +5,8 @@
 std::queue<Element> elements;
 
 //creates db with given cf_names and path
-void Database::create_db(std::string path,
-                         std::vector<std::string> family_names)
+void Database::create_db(std::string &path,
+                         std::vector<std::string> &family_names)
 {
   //open db
   rocksdb::Options options;
@@ -37,14 +37,14 @@ void Database::close_db() {
 }
 
 //fills _column_families_names
-void Database::fill_vector(int num) {
+void Database::fill_vector(int &num) {
   for (int i = 0; i != num; i++) {
     _column_families_names.push_back("fam"+ std::to_string(i));
   }
 }
 
 //copies _column_families_names to _column_families
-void Database::parse(std::string way_to_db){
+void Database::parse(std::string &way_to_db){
   _way = way_to_db;
   rocksdb::Status s;
 
@@ -59,7 +59,7 @@ void Database::parse(std::string way_to_db){
 }
 
 //writes value to db
-void Database::put_value(Element element) {
+void Database::put_value(Element &element) {
   m2.lock();
   std::vector<std::string>::iterator it =
       std::find(_column_families_names.begin(),
@@ -76,7 +76,7 @@ void Database::put_value(Element element) {
 }
 
 //gets value from db
-Element Database::get_value(std::string key, std::string column_family_name) {
+Element Database::get_value(std::string &key, std::string &column_family_name) {
   std::vector<std::string>::iterator
       it = std::find(_column_families_names.begin(),
                _column_families_names.end(), column_family_name);
@@ -109,6 +109,12 @@ void Database::print() {
   }
 }
 
+//prints trivial log 
+void Database::print_trivial_log(Element &element){
+  BOOST_LOG_TRIVIAL(info) << " :" << element._key << " "
+                          << element._value << std::endl;
+}
+
 //fills new db with values from queue
 void Database::fill_db() {
   bool status = true;
@@ -119,6 +125,7 @@ void Database::fill_db() {
       Element tmp = elements.front();
       put_value(tmp);
       elements.pop();
+      print_trivial_log(tmp);
       m1.unlock();
     } else {
       status = false;
@@ -129,20 +136,32 @@ void Database::fill_db() {
 
 
 //fills the queue with values from given db
-void Database::read_db(){
-    for (const auto iter : _handles) {
-      rocksdb::Iterator *it =
-          _db->NewIterator(rocksdb::ReadOptions(),
-                           iter);
-      for (it->SeekToFirst(); it->Valid(); it->Next()) {
-        Element tmp(it->key().ToString(),
-                    it->value().ToString(),
-                    iter->GetName());
-        elements.push(tmp);
-      }
-      assert(it->status().ok());
-      if (!elements.empty())
-      delete it;
+void Database::read_db() {
+  for (const auto iter : _handles) {
+    rocksdb::Iterator *it = _db->NewIterator(rocksdb::ReadOptions(), iter);
+    for (it->SeekToFirst(); it->Valid(); it->Next()) {
+      Element tmp(it->key().ToString(), it->value().ToString(),
+                  iter->GetName());
+      elements.push(tmp);
     }
+    assert(it->status().ok());
+    if (!elements.empty()) delete it;
   }
-  
+}
+
+void Database::logger(std::string &level) {
+  boost::log::register_simple_formatter_factory<boost::log
+  ::trivial::severity_level, char>(level);
+  const std::string format =
+      "%TimeStamp% <%Severity%> (%ThreadID%): %Message%";
+  boost::log::add_file_log(
+      boost::log::keywords::file_name = "logs/log_trace_%N.log",
+      boost::log::keywords::rotation_size = _256_MiB,
+      boost::log::keywords::format = format);
+  boost::log::add_console_log(
+      std::clog,
+      boost::log::keywords::format =
+          format);
+  boost::log::add_common_attributes();
+}
+
