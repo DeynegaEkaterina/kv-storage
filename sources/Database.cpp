@@ -120,8 +120,8 @@ void Database::fill_db() {
       Element tmp = elements.front();
       put_value(tmp);
       elements.pop();
-      BOOST_LOG_TRIVIAL(info) << " :" << tmp._key << " "
-                               << tmp._value << std::endl;
+      //BOOST_LOG_SEV(logger(level), level) << " :" << tmp._key << " "
+                             //  << tmp._value << std::endl;
       m1.unlock();
     } else {
       status = false;

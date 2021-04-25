@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
     input = path_in;
     std::cout << "input:" << input << std::endl;
   }
-
+ log_level = "trace";
   Database::logger(log_level);
 
      std::vector <std::thread> threads;
