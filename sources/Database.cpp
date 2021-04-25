@@ -109,7 +109,7 @@ void Database::print() {
   }
 }
 
-//prints trivial log 
+//prints trivial log
 void Database::print_trivial_log(Element &element){
   BOOST_LOG_TRIVIAL(info) << " :" << element._key << " "
                           << element._value << std::endl;
@@ -164,4 +164,3 @@ void Database::logger(std::string &level) {
           format);
   boost::log::add_common_attributes();
 }
-
