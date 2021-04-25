@@ -9,6 +9,8 @@ std::string path_out("/home/ekaterina/CLionProjects/lab-10-kv-storage/cmake-buil
 
 int main(int argc, char* argv[]) {
 
+
+
   po::options_description descr("Usage");
   po::options_description desc("Options");
   desc.add_options()("log_level <string>",po::value<std::string>(), "= \"info\"|\"warning\"|\"error\"\n= default: \"Error\"\n")(

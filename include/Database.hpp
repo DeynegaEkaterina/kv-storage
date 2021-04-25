@@ -47,7 +47,9 @@ class Database{
   static void fill_db();
   void read_db();
   static void logger(std::string &level);
-  static void print_trivial_log(Element &element);
+
+  static boost::log::trivial::severity_level choose_sev_level(
+      const std::string& sev_level);
 
   inline static std::vector<std::string> _column_families_names;
   inline static rocksdb::DB *_db;
