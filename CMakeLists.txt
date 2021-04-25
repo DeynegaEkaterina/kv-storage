@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.12)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(Boost_USE_STATIC_LIBS ON)
+set(HUNTER_STATUS_DEBUG ON)
 
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_DOCS "Build documentation" OFF)
@@ -21,6 +22,7 @@ HunterGate(
         SHA1 "35fa55bc1dfcf9f4d7264f8bb26cd1759ce1ae07"
         #        LOCAL
 )
+
 
 
 # TODO: rename project and delete this comment
