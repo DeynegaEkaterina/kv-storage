@@ -1,9 +1,18 @@
-// Copyright 2020 Your Name <your_email>
+// Copyright 2021 Deynega Ekaterina
 
 #ifndef INCLUDE_ELEMENT_HPP_
 #define INCLUDE_ELEMENT_HPP_
 
 #include <string>
+
+/**
+ * @namespace std
+ * @struct Element
+ * @brief
+ * This class describes database's element structure. Elements consist of
+ * key-value pairs. This pairs are grouped in columns.
+ */
+
 struct Element{
   Element() = default;
 

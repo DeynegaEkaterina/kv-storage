@@ -1,4 +1,4 @@
-// Copyright 2020 Your Name <your_email>
+// Copyright 2020 Deynega Ekaterina
 
 #ifndef INCLUDE_DATABASE_HPP_
 #define INCLUDE_DATABASE_HPP_
@@ -32,6 +32,13 @@
 #include <thread>
 
 
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * This class is used for manipulating rocksdb databases
+ *
+ */
 class Database{
  public:
   Database() = default;

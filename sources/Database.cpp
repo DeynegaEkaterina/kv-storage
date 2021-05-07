@@ -1,10 +1,19 @@
-// Copyright 2020 Your Name <your_email>
+// Copyright 2020 Deynega Ekaterina
 
 #include <Database.hpp>
 
 std::queue<Element> elements;
 
-//creates db with given cf_names and path
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Creates database. New database should have unique address. It cannot be
+ * rewritten.
+ * @param path path to file
+ * @param family_names  names of columns in database
+ * @return void
+ */
 void Database::create_db(std::string &path,
                          std::vector<std::string> &family_names)
 {
@@ -26,7 +35,7 @@ void Database::create_db(std::string &path,
   assert(s.ok());
 }
 
-//opens db
+
 void Database::open_db() {
   rocksdb::DB::Open(rocksdb::DBOptions(), _way, _column_families,
                     &_handles, &_db);
@@ -36,14 +45,28 @@ void Database::close_db() {
   delete _db;
 }
 
-//fills _column_families_names
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief  Fills std::vector<std::string> _column_families_names with values.
+ * @param num number of values
+ * @return void
+ */
 void Database::fill_vector(int &num) {
   for (int i = 0; i != num; i++) {
     _column_families_names.push_back("fam"+ std::to_string(i));
   }
 }
 
-//copies _column_families_names to _column_families
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Copies _column_families_names to _column_families
+ * @param way_to_db path to database
+ * @return void
+ */
+
 void Database::parse(std::string &way_to_db){
   _way = way_to_db;
   rocksdb::Status s;
@@ -58,7 +81,14 @@ void Database::parse(std::string &way_to_db){
   }
 }
 
-//writes value to db
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Writes value to database
+ * @param element database element
+ * @return void
+ */
 void Database::put_value(Element &element) {
   m2.lock();
   std::vector<std::string>::iterator it =
@@ -75,7 +105,16 @@ void Database::put_value(Element &element) {
   m2.unlock();
 }
 
-//gets value from db
+
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Gets value with given key and column family name from database.
+ * @param key element's key
+ * @param column_family_name the name of column family
+ * @return element of database
+ */
 Element Database::get_value(std::string &key, std::string &column_family_name) {
   std::vector<std::string>::iterator
       it = std::find(_column_families_names.begin(),
@@ -94,7 +133,14 @@ Element Database::get_value(std::string &key, std::string &column_family_name) {
   }
 }
 
-//prints cf and values
+
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Prints column family name and values of database
+ * @return void
+ */
 void Database::print() {
   for (const auto iter : _handles) {
     std::cout << "family " + iter->GetName() << std::endl;
@@ -110,7 +156,14 @@ void Database::print() {
 }
 
 
-//fills new db with values from queue
+
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Fills new database with values from queue
+ * @return void
+ */
 void Database::fill_db() {
   bool status = true;
   while (status) {
@@ -131,7 +184,14 @@ void Database::fill_db() {
 }
 
 
-//fills the queue with values from given db
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Fills the queue with values from given db
+ * @return void
+ */
+
 void Database::read_db() {
   for (const auto iter : _handles) {
     rocksdb::Iterator *it = _db->NewIterator(rocksdb::ReadOptions(), iter);
@@ -145,6 +205,15 @@ void Database::read_db() {
   }
 }
 
+/**
+ * @namespace rocksdb
+ *@class Database
+ * @brief
+ * Makes logging on "info" level
+ * @param level logging level
+ * @return void
+ * @todo logging on different levels
+ */
 void Database::logger(std::string &level) {
   boost::log::register_simple_formatter_factory<boost::log
   ::trivial::severity_level, char>(level);
