@@ -23,9 +23,6 @@ HunterGate(
         #        LOCAL
 )
 
-
-
-# TODO: rename project and delete this comment
 project(suggestion)
 string(APPEND CMAKE_CXX_FLAGS " -pedantic -Werror -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS " -Wno-unused-command-line-argument")
@@ -79,7 +76,6 @@ target_link_libraries(demo ${PROJECT_NAME})
 
 if(BUILD_TESTS)
   add_executable(tests
-          # TODO: enum your files and delete this comment
           ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp
           )
   target_link_libraries(tests ${PROJECT_NAME} GTest::gtest_main)

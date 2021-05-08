@@ -173,8 +173,25 @@ void Database::fill_db() {
       Element tmp = elements.front();
       put_value(tmp);
       elements.pop();
-      BOOST_LOG_TRIVIAL(info) << " :" << tmp._key << " "
-                             << tmp._value << std::endl;
+        if (loglevel == "debug" || loglevel == "Debug"){
+          BOOST_LOG_TRIVIAL(debug) << " :" << tmp._key << " "
+                                   << tmp._value << std::endl;
+        } else if (loglevel == "info" || loglevel == "Info"){
+          BOOST_LOG_TRIVIAL(info) << " :" << tmp._key << " "
+                                  << tmp._value << std::endl;
+        } else if (loglevel == "warning" || loglevel == "Warning"){
+          BOOST_LOG_TRIVIAL(warning) << " :" << tmp._key << " "
+                                  << tmp._value << std::endl;
+        } else if (loglevel == "error" || loglevel == "Error"){
+          BOOST_LOG_TRIVIAL(error) << " :" << tmp._key << " "
+                                   << tmp._value << std::endl;
+        } else if (loglevel == "fatal" || loglevel == "Fatal"){
+          BOOST_LOG_TRIVIAL(fatal) << " :" << tmp._key << " "
+                                   << tmp._value << std::endl;
+        } else if (loglevel == "trace" || loglevel == "Trace"){
+          BOOST_LOG_TRIVIAL(trace) << " :" << tmp._key << " "
+                                   << tmp._value << std::endl;
+        }
       m1.unlock();
     } else {
       status = false;
@@ -212,9 +229,9 @@ void Database::read_db() {
  * Makes logging on "info" level
  * @param level logging level
  * @return void
- * @todo logging on different levels
  */
 void Database::logger(std::string &level) {
+  loglevel = level;
   boost::log::register_simple_formatter_factory<boost::log
   ::trivial::severity_level, char>(level);
   const std::string format =
@@ -229,3 +246,4 @@ void Database::logger(std::string &level) {
           format);
   boost::log::add_common_attributes();
 }
+

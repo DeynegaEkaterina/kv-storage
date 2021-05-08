@@ -63,6 +63,7 @@ class Database{
   inline static std::mutex m1;
   inline static std::mutex m2;
   inline static  size_t _256_MiB = 1024 * 256 * 1024;
+  inline static std::string loglevel;
 };
 
 

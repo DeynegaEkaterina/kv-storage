@@ -10,18 +10,22 @@ std::string path_out("/home/ekaterina/CLionProjects/lab-10-kv-storage/cmake-buil
 
 int main(int argc, char* argv[]) {
 
-
-
   po::options_description descr("Usage");
   po::options_description desc("Options");
-  desc.add_options()("log_level <string>",po::value<std::string>(), "= \"info\"|\"warning\"|\"error\"\n= default: \"Error\"\n")(
-      "thread_count <number>", po::value<size_t>(), "= default: count of logical core\n")(
-      "input <path>", po::value<std::string>(), "= <path/to/input/storage.db>\n= default: /home/.../cmake-build-debug/db1\n")(
-      "output <path>", po::value<std::string>(), "= <path/to/output/storage.db>\n= default: /home/.../cmake-build-debug/db2\n")(
+  desc.add_options()("log_level",po::value<std::string>(),
+      "= \"info\"|\"warning\"|\"error\"\n= default: \"Error\"\n")(
+      "thread_count", po::value<size_t>(),
+      "= default: count of logical core\n")(
+      "input", po::value<std::string>(),
+      "= <path/to/input/storage.db>\n= default: /home/.../cmake-build-debug/db1\n")(
+      "output", po::value<std::string>(),
+      "= <path/to/output/storage.db>\n= default: /home/.../cmake-build-debug/db2\n")(
       "help", "optional information\n");
 
   po::variables_map vm; // хранит ключи
   po::store(po::parse_command_line(argc, argv, desc), vm);
+  po::notify(vm);
+
 
   if (vm.count("help")) {
     std::cout << descr;
@@ -30,21 +34,21 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  std::string log_level;
+  std::string log_level{};
   size_t thread_count;
-  std::string  input;
-  std::string output;
+  std::string  input{};
+  std::string output{};
 
 
-  if (vm.count("log-level")) {
-    log_level = vm["log-level"].as<std::string>();
-    std::cout << "log-level:" << log_level << std::endl;
+  if (vm.count("log_level")) {
+    log_level =  vm["log_level"].as<std::string>();
+    std::cout << "log_level:" << log_level << std::endl;
   } else {
-    log_level = "Error";
-    std::cout << "log-level:" << log_level << std::endl;
+    log_level = "Trace";
+    std::cout << "log_level:" << log_level << std::endl;
   }
-  if (vm.count("thread-count")) {
-    thread_count = vm["thread-count"].as<int>();
+  if (vm.count("thread_count")) {
+    thread_count = vm["thread_count"].as<size_t>();
     std::cout << "threads:" << thread_count << std::endl;
   } else {
     thread_count = std::thread::hardware_concurrency();
@@ -65,7 +69,9 @@ int main(int argc, char* argv[]) {
     std::cout << "input:" << input << std::endl;
   }
 
+
   Database::logger(log_level);
+
 
   std::vector <std::thread> threads;
   for (size_t i = 0; i < thread_count; ++i) {
