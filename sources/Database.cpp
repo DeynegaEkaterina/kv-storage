@@ -35,12 +35,25 @@ void Database::create_db(std::string &path,
   assert(s.ok());
 }
 
-
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Opens database
+ * @return void
+ */
 void Database::open_db() {
   rocksdb::DB::Open(rocksdb::DBOptions(), _way, _column_families,
                     &_handles, &_db);
 }
 
+/**
+ * @namespace rocksdb
+ * @class Database
+ * @brief
+ * Closes and deletes database
+ * @return void
+ */
 void Database::close_db() {
   delete _db;
 }
@@ -66,7 +79,6 @@ void Database::fill_vector(int &num) {
  * @param way_to_db path to database
  * @return void
  */
-
 void Database::parse(std::string &way_to_db){
   _way = way_to_db;
   rocksdb::Status s;
